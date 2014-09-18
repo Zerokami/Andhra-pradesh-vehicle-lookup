@@ -1,0 +1,34 @@
+<RootWidget>:
+#This is the root widget's kv definition
+    
+    search_input: ap
+    roosvelt:roosvelt
+    
+    Screen:
+        
+        name: 'Screen 1'
+        
+        BoxLayout:
+            
+            orientation: 'vertical'
+            
+            TextInput:
+                id: ap
+                hint_text: 'Enter license plate number here'
+                size_hint: (1,0.1)
+                multiline:False
+                on_text_validate: root.postbug()
+                font_size:20
+                
+                
+            Button:
+                text: 'Search'
+                on_press: root.postbug(); ap.hide_keyboard()
+                size_hint: (1,0.1)
+                
+            Label:
+                text: "Note: Works for Andhra Pradesh Numbers only"
+                id:roosvelt
+          
+ 
+            
