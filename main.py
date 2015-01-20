@@ -3,8 +3,9 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import NumericProperty
 from kivy.lang import Builder
 from kivy.network.urlrequest import UrlRequest
-from bs4 import BeautifulSoup
 import urllib
+import lxml.html
+
 
 
 
@@ -15,31 +16,32 @@ class RootWidget(ScreenManager):
     '''
     def post_last(self, req, result):
         try:
-            soup = BeautifulSoup(result)
-            var ="Owner: "+ soup.find(id="ctl00_OnlineContent_tdOwner").text+"\n"*2
-            var+= "Vehicle Class: "+ soup.find(id="ctl00_OnlineContent_tdVehClass").text+"\n"*2
-            var+= "Colour: "+ soup.find(id="ctl00_OnlineContent_tdColor").text+"\n"*2
-            var+= "Maker's Name: "+ soup.find(id="ctl00_OnlineContent_tdMkrName").text+"\n"*2
-            var+= "Mfg.Year: "+ soup.find(id="ctl00_OnlineContent_tdMfgYear").text+"\n"*2
-            var+= "Maker's Class: " + soup.find(id="ctl00_OnlineContent_tdMkrClass").text+"\n"*2
-            var+= "Engine No.: " + soup.find(id="ctl00_OnlineContent_tdEngNo").text+"\n"*2
-            var+= "Registration Date: " + soup.find(id="ctl00_OnlineContent_tdDOR").text+"\n"*2
-            var+= "Chassis No: " + soup.find(id="ctl00_OnlineContent_tdChassisno").text+"\n"*2
-            self.roosvelt.text= var    
-        except Exception, e:
-            self.roosvelt.text= "Invalid input, Try again!"
+            self.roosvelt.text= ".........."
+            data = lxml.html.fromstring(result, base_url="https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx")
+            var = "Owner: " + data.cssselect("#ctl00_OnlineContent_tdOwner")[0].text_content()+"\n"*2
+            var+= "Colour: "+ data.cssselect("#ctl00_OnlineContent_tdColor")[0].text_content()+"\n"*2
+            var+= "Maker's Name: "+ data.cssselect("#ctl00_OnlineContent_tdMkrName")[0].text_content()+"\n"*2
+            var+= "Mfg.Year: "+ data.cssselect("#ctl00_OnlineContent_tdMfgYear")[0].text_content()+"\n"*2
+            var+= "Maker's Class: "+ data.cssselect("#ctl00_OnlineContent_tdMkrClass")[0].text_content()+"\n"*2
+            var+= "Engine No.: " + data.cssselect("#ctl00_OnlineContent_tdEngNo")[0].text_content()+"\n"*2
+            var+= "Registration Date: " + data.cssselect("#ctl00_OnlineContent_tdDOR")[0].text_content()+"\n"*2
+            var+= "Chassis No: " + data.cssselect("#ctl00_OnlineContent_tdChassisno")[0].text_content()+"\n"*2
+            self.roosvelt.text= var
+        except Exception as e:
+            print e
+            self.roosvelt.text = str(e)
 
     def post_again(self, t):
         headers = {'Content-type': 'application/x-www-form-urlencoded','Accept': 'text/plain'}
         params = urllib.urlencode({'__VIEWSTATE': t, 'ctl00$OnlineContent$btnGetData':"Get Data","ctl00$OnlineContent$txtInput":self.search_input.text,"ct0":"R"})
         req = UrlRequest('https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx', on_success=self.post_last, req_headers=headers,req_body=params)
+        self.roosvelt.text = "Loading....."
 
     def posted(self, req, result):
-        soup = BeautifulSoup(result)
-        print soup
-        m= soup.find(id= "__VIEWSTATE")
-        t= m.get('value')
-        self.post_again(t)
+        data = lxml.html.fromstring(result, base_url="https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx")
+        m = data.cssselect("#__VIEWSTATE")[0].text_content()
+        self.post_again(m)
+        self.roosvelt.text = "Loading.."
 
     def postbug(self):
 		    
