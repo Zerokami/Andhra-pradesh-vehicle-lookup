@@ -48,7 +48,6 @@ class RootWidget(ScreenManager):
         headers = {'Content-type': 'application/x-www-form-urlencoded','Accept': 'text/plain'}
         req = UrlRequest('https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx', on_success=self.posted, req_headers=headers)
     
-    pass
 
 class MainApp(App):
     '''This is the main class of your app.
