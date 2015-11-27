@@ -2,12 +2,15 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import NumericProperty
 from kivy.lang import Builder
-from kivy.network.urlrequest import UrlRequest
-import urllib
-import lxml.html
+from kivy.network.urlrequest import UrlRequest            # A component of Kivy for making asynchronus requests
 
+from urllib import urlencode                              # For encoding post data
 
+import lxml.html                                          # The library used for parsing HTML
 
+BASE_URL = "https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx" # The link from which the results are scraped
+
+HEADERS = {'Content-type': 'application/x-www-form-urlencoded','Accept': 'text/plain'} # The headers required for the request
 
 class RootWidget(ScreenManager):
     '''This the class representing your root widget.
@@ -17,7 +20,7 @@ class RootWidget(ScreenManager):
     def post_last(self, req, result):
         try:
             self.roosvelt.text= ".........."
-            data = lxml.html.fromstring(result, base_url="https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx")
+            data = lxml.html.fromstring(result, base_url= BASE_URL)
             var = "Owner: " + data.cssselect("#ctl00_OnlineContent_tdOwner")[0].text_content()+"\n"*2
             var+= "Colour: "+ data.cssselect("#ctl00_OnlineContent_tdColor")[0].text_content()+"\n"*2
             var+= "Maker's Name: "+ data.cssselect("#ctl00_OnlineContent_tdMkrName")[0].text_content()+"\n"*2
@@ -32,21 +35,21 @@ class RootWidget(ScreenManager):
             self.roosvelt.text = str(e)
 
     def post_again(self, t):
-        headers = {'Content-type': 'application/x-www-form-urlencoded','Accept': 'text/plain'}
-        params = urllib.urlencode({'__VIEWSTATE': t, 'ctl00$OnlineContent$btnGetData':"Get Data","ctl00$OnlineContent$txtInput":self.search_input.text,"ct0":"R"})
-        req = UrlRequest('https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx', on_success=self.post_last, req_headers=headers,req_body=params)
+
+        params = urlencode({'__VIEWSTATE': t, 'ctl00$OnlineContent$btnGetData':"Get Data","ctl00$OnlineContent$txtInput":self.search_input.text,"ct0":"R"})
+        req = UrlRequest(BASE_URL, on_success=self.post_last, req_headers=HEADERS,req_body=params)
         self.roosvelt.text = "Loading....."
 
     def posted(self, req, result):
-        data = lxml.html.fromstring(result, base_url="https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx")
+
+        data = lxml.html.fromstring(result, base_url= BASE_URL)
         m = data.cssselect("#__VIEWSTATE")[0].text_content()
         self.post_again(m)
         self.roosvelt.text = "Loading.."
 
     def postbug(self):
-		    
-        headers = {'Content-type': 'application/x-www-form-urlencoded','Accept': 'text/plain'}
-        req = UrlRequest('https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx', on_success=self.posted, req_headers=headers)
+	    
+        req = UrlRequest(BASE_URL, on_success=self.posted, req_headers=HEADERS)
     
 
 class MainApp(App):
