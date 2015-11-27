@@ -1,4 +1,4 @@
-Andhra-pradesh-vehicle-lookup
+#Andhra Pradesh vehicle lookup
 =============================
 This project is written in Python and uses the Kivy library which supports Android, Iphone, Windows, Linux and Mac OS.
 
@@ -10,7 +10,7 @@ Owner Name           :    NARSIMHA SWAMY T
 Vehicle Color        :    LONGBEACHBLUE
 Vehicle Class        :    MOTOR CYCLE 	
 Maker's Name         :    BAJAJ AUTO LTD
-Mfg.Year             :    01/09/2006 	
+Mfg.Year             :    01/09/2006	 
 Maker's Class	     :    BAJAJ PLANTINA BSII
 Engine No            :    DUMCNB64247 	
 Date Of Registration :	  14/11/2006
@@ -20,4 +20,4 @@ Status               :    ACTIVE
 
 It scrapes details from the site https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx
 
-	
+![Image of demo](http://ecx.images-amazon.com/images/I/51Vn4oucbdL.png)
