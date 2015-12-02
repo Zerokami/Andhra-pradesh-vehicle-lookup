@@ -36,7 +36,7 @@ class RootWidget(ScreenManager):
             var+= "Chassis No: " + data.cssselect("#ctl00_OnlineContent_tdChassisno")[0].text_content()+"\n"*2
             self.roosvelt.text= var
         except Exception as e:
-            print e
+            print(e)
             self.roosvelt.text = str(e)
 
     def post_again(self, t):
