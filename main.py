@@ -8,15 +8,20 @@ from urllib import urlencode                              # For encoding post da
 
 import lxml.html                                          # The library used for parsing HTML
 
-BASE_URL = "https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx" # The link from which the results are scraped
+BASE_URL = "https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx" # The link from which the results are scraped. The
 
 HEADERS = {'Content-type': 'application/x-www-form-urlencoded','Accept': 'text/plain'} # The headers required for the request
+
 
 class RootWidget(ScreenManager):
     '''This the class representing your root widget.
        By default it is inherited from ScreenManager,
        you can use any other layout/widget depending on your usage.
     '''
+    def clean_input(self, input_num):
+        input_num = input_num.replace(" ","").strip()
+        return(input_num)
+
     def post_last(self, req, result):
         try:
             self.roosvelt.text= ".........."
@@ -36,7 +41,7 @@ class RootWidget(ScreenManager):
 
     def post_again(self, t):
 
-        params = urlencode({'__VIEWSTATE': t, 'ctl00$OnlineContent$btnGetData':"Get Data","ctl00$OnlineContent$txtInput":self.search_input.text,"ct0":"R"})
+        params = urlencode({'__VIEWSTATE': t, 'ctl00$OnlineContent$btnGetData':"Get Data","ctl00$OnlineContent$txtInput":self.clean_input(self.search_input.text),"ct0":"R"})
         req = UrlRequest(BASE_URL, on_success=self.post_last, req_headers=HEADERS,req_body=params)
         self.roosvelt.text = "Loading....."
 
