@@ -76,6 +76,13 @@ class MainApp(App):
 
        The App part is auto removed and the whole name is lowercased.
     '''
+    def on_pause(self):
+        # Here you can save data if needed
+        return True
+
+    def on_resume(self):
+        # Here you can check if any data needs replacing (usually nothing)
+        pass
     def build(self):
         '''Your app will be build from here.
            Return your widget here.
