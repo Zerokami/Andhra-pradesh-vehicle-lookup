@@ -21,3 +21,5 @@ Status               :    ACTIVE
 It scrapes details from the site https://aptransport.in/APCFSTONLINE/Reports/VehicleRegistrationSearch.aspx
 
 ![Image of demo](http://ecx.images-amazon.com/images/I/51Vn4oucbdL.png)
+
+[![Code Issues](https://www.quantifiedcode.com/api/v1/project/8c389fd29c9e4863bf91f5fd2d17c2bb/badge.svg)](https://www.quantifiedcode.com/app/project/8c389fd29c9e4863bf91f5fd2d17c2bb)
