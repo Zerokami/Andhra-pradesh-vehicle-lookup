@@ -19,10 +19,16 @@ class RootWidget(ScreenManager):
        you can use any other layout/widget depending on your usage.
     '''
     def clean_input(self, input_num):
+    	'''' Cleans the input by removing and stripping spaces.
+    	Not sure is stripping is necessary because the space is already replaced.
+    	This is done because the target site is space sensitie'''
         input_num = input_num.replace(" ","").strip()
         return(input_num)
 
     def post_last(self, req, result):
+    	'''Scrapes the result with lxml using CSS to select the required data.
+    	And displays it on the screen.
+    	'''
         try:
             self.roosvelt.text= ".........."
             data = lxml.html.fromstring(result, base_url= BASE_URL)
@@ -40,12 +46,14 @@ class RootWidget(ScreenManager):
             self.roosvelt.text = str(e)
 
     def post_again(self, t):
+    	''' The final request made with the "_VIEWSTATE" CSRF value scraped using posted()'''
 
         params = urlencode({'__VIEWSTATE': t, 'ctl00$OnlineContent$btnGetData':"Get Data","ctl00$OnlineContent$txtInput":self.clean_input(self.search_input.text),"ct0":"R"})
         req = UrlRequest(BASE_URL, on_success=self.post_last, req_headers=HEADERS,req_body=params)
         self.roosvelt.text = "Loading....."
 
     def posted(self, req, result):
+    	'''For scraping the "#__VIEWSTATE" CSRF protection value using cssselect'''
 
         data = lxml.html.fromstring(result, base_url= BASE_URL)
         m = data.cssselect("#__VIEWSTATE")[0].text_content()
@@ -53,6 +61,9 @@ class RootWidget(ScreenManager):
         self.roosvelt.text = "Loading.."
 
     def postbug(self):
+    	'''This request is made to the server to get the cookies 
+    	and the CSRF protection key which are then passed on to posted()
+    	'''
 	    
         req = UrlRequest(BASE_URL, on_success=self.posted, req_headers=HEADERS)
     
