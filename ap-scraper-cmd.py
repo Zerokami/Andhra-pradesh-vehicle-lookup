@@ -42,11 +42,7 @@ def add_zeros(length, in_value):
     return(zeros+in_value)
 
 def clean_newlines(text):
-    while(True):
-        if "\n"*3 in text:
-            text = text.replace("\n"*3, "\n")
-        else:
-            break
+    text = text.replace("\n"*3, "\n")
     return(text)
 
 if __name__ == "__main__":
